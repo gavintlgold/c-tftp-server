@@ -244,8 +244,10 @@ int handle_data(char *buf, int pack_size, struct clientinfo *client) {
 
   // If we get an invalid block, we might have had a timeout. The client sending the data needs to be acknowledged,
   // even if the data is to be ignored. Otherwise it will not continue sending data.
-  if (client->last_block+1 != block) {
-    ERROR_MSG("(client %i) Got unexpected block #%i, acknowledging and discarding", client_get_tid(*client), block);
+  // If there are more than UINT_MAX packets, the client seems to expect integer wrapping
+  unsigned next_block = client_get_next_block(client);
+  if (next_block != block) {
+    ERROR_MSG("(client %i) Got unexpected block #%i (expected #%i), acknowledging and discarding", client_get_tid(*client), block, next_block);
     if (send_ack(block, *client) == RETURN_ERR) {
       return RETURN_ERR;
     }

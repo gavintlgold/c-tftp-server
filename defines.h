@@ -13,6 +13,7 @@
 #define TFTP_MAX_REQ_BUF_SIZE 514
 #define TFTP_STD_HEADER_SIZE  4
 #define TFTP_REQ_HEADER_SIZE  2
+#define TFTP_PACKET_OVERFLOW (1 << 16)
 
 #define TIMEOUT      5 // five second timeout
 #define MAX_TIMEOUTS 5

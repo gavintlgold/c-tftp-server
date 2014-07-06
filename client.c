@@ -99,10 +99,15 @@ int handle_client(struct clientinfo *client,
   return 0;
 }
 
+unsigned client_get_next_block(struct clientinfo *client) {
+  return (client->last_block + 1) % TFTP_PACKET_OVERFLOW;
+}
+
 void client_update_block(int size, struct clientinfo *client) {
-  client->last_block++;
+  client->last_block = client_get_next_block(client);
   client->last_amount_written = size;
 }
+
 
 void client_set_request(int req, struct clientinfo *client) {
   client->request = req;
